@@ -7,16 +7,18 @@ namespace FProj.Api
     {
         public static Film FilmApiToData(FilmApi filmApi)
         {
-            return new Film() {
+            System.DateTime minSqlDate = new System.DateTime(1753, 1, 1, 0, 0, 0);
+            return new Film()
+            {
                 Description = filmApi.Description,
                 Director = filmApi.Director,
                 Duration = filmApi.Duration,
                 Id = filmApi.Id,
-                PremiereDate = filmApi.PremiereDate,
+                PremiereDate = System.DateTime.Compare(minSqlDate, filmApi.PremiereDate) <= 0 ? filmApi.PremiereDate : minSqlDate,
                 Rate = filmApi.Rate,
                 Title = filmApi.Title,
                 DateCreated = filmApi.DateCreated,
-                UserIdCreator = filmApi.User.Id               
+                UserIdCreator = filmApi.User.Id
             };
         }
 

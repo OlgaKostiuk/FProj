@@ -16,7 +16,7 @@
             <table class="table table-responsive table-hover" style="text-align: justify">
                 <tr>
                     <td>Title</td>
-                    <td><input class="form-control" type="text" name="Title" value="@Model.Title" /></td>
+                    <td><input class="form-control" type="text" name="Title" value="@Model.Title" required /></td>
                 </tr>
                 <tr>
                     <td>Director</td>
@@ -30,7 +30,7 @@
 
                 <tr>
                     <td>Premiere Date</td>
-                    <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" /></td>
+                    <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" min="1753-01-01" /></td>
                 </tr>
 
                 <tr>
@@ -40,7 +40,7 @@
 
                 <tr>
                     <td>Description</td>
-                    <td><textarea class="form-control" type="text" name="Description" value="@Model.Description"> </textarea></td>
+                    <td><textarea class="form-control" type="text" name="Description" value="@Model.Description" required ></textarea></td>
                 </tr>
 
                 <tr>
