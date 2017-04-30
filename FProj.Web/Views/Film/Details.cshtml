@@ -53,11 +53,31 @@
                 </tr>
             </table>
         </div>
+        <div class="col-md-12" style="clear: both">
+            @foreach (var img in Model.Pictures)
+            {
+                <img class="img-thumbnail picture" src="@img.Path"/>
+            }
+        </div>
     </div>
 </div>
-    <script>
+
+<div id="preview" style="display: none;">
+    <img id="fullscreen" class="img-responsive"/>
+</div>
+<script>
     $(function () {
         $("#uploader").click(submitUpload);
+
+        $("#fullscreen").click(function() { $("#preview").fadeOut("fast").css("display", "none"); });
+
+        $(".picture").click(function() {
+            let src = $(this).attr("src");
+            $("#fullscreen").attr("src", src);
+
+            if (!$("#preview").is(":visible"))
+                $("#preview").fadeIn("fast").css("display", "flex");
+        })
 
         function submitUpload() {
             var formData = new FormData($("#FormData")[0]);

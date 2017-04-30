@@ -49,7 +49,14 @@
                             <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" />
                         </td>
                     </tr>
+                    <tr>
+                        <td>Frames</td>
+                        <td>
+                            <input class="form-control" type="file" id="frames" name="frames" accept="image/jpeg,image/png,image/gif" multiple="multiple" />
+                        </td>
+                    </tr>
                 </table>
+                <div class="col-md-12 frames"></div>
                 <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
             }
 
@@ -60,7 +67,6 @@
         $(function () {
             $("#file").on("change",
                 function () {
-
                     if ($(this)[0].files.length == 0) return;
 
                     var reader = new FileReader();
@@ -71,6 +77,26 @@
                     reader.readAsDataURL($(this)[0].files[0]);
                     return;
                 });
+
+            $("#frames").on("change", function() {
+                if ($(this)[0].files.length == 0) return;
+                $("div.frames").html("");
+                let index = 0;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("div.frames").append(`<img class="img-thumbnail" src="${e.target.result}"/>`);
+                }
+
+                reader.onloadend = function(e) {
+                    index++;
+                    if (index >= $("#frames")[0].files.length) return;
+
+                    reader.readAsDataURL($("#frames")[0].files[index]);
+                }
+
+                reader.readAsDataURL($(this)[0].files[index]);
+                return;
+            });
         });
 
     </script>
