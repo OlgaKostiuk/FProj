@@ -1,0 +1,59 @@
+﻿@model List<FProj.Api.FilmApi>
+<div id="body">
+    @foreach (var film in Model)
+    {
+        <div class="col-md-12">
+            <div class="col-md-4">
+                @if (film.Poster != null)
+                {
+                    <img class="img-thumbnail poster" src="@film.Poster.Path" />
+                }
+            </div>
+            <div class="col-md-8">
+                <h3><b>@film.Title</b></h3>
+                <table class="table table-responsive" style="text-align:justify">
+                    <tr>
+                        <td>Director</td>
+                        <td>@film.Director</td>
+                    </tr>
+
+                    <tr>
+                        <td>Duration</td>
+                        <td>@film.Duration min</td>
+                    </tr>
+
+                    <tr>
+                        <td>Premiere Date</td>
+                        <td>@film.PremiereDate.ToShortDateString()</td>
+                    </tr>
+
+                    <tr>
+                        <td>Rate</td>
+                        <td>@film.Rate+</td>
+                    </tr>
+
+                    <tr>
+                        <td>Description</td>
+                        <td>@film.Description</td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary details" data-id="@film.Id">Details</button>
+
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<script>
+        $(function() {
+            $(".details").click(function() {
+                location.href = '@Url.Action("Details")/' + $(this).attr("data-id");
+            });
+        });
+</script>

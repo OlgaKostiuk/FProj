@@ -4,39 +4,23 @@ namespace FProj.Repository
 {
     public class UnitOfWork
     {
-        private readonly FProjContext _context = null;
+        private readonly FProjContext _context;
 
-        private static UnitOfWork _instance = null;
-        public static UnitOfWork Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new UnitOfWork();
-                return _instance;
-            }
-        }
+        private static UnitOfWork _instance;
+        public static UnitOfWork Instance => _instance ?? (_instance = new UnitOfWork());
+
         private UnitOfWork()
         {
             _context = new FProjContext();
         }
 
-        private FilmRepository _filmRepository = null;
-        public FilmRepository FilmRepository
-        {
-            get
-            {
-                if (_filmRepository == null)
-                    _filmRepository = new FilmRepository(_context);
-                return _filmRepository;
-            }
-        }
+        private FilmRepository _filmRepository;
+        public FilmRepository FilmRepository => _filmRepository ?? (_filmRepository = new FilmRepository(_context));
 
-        private ImageRepository _imageRepository = null;
-        public ImageRepository ImageRepository { get {
-                if (_imageRepository == null)
-                    _imageRepository = new ImageRepository(_context);
-                return _imageRepository;
-            } }
+        private ImageRepository _imageRepository;
+        public ImageRepository ImageRepository => _imageRepository ?? (_imageRepository = new ImageRepository(_context));
+
+        private UserRepository _userRepository;
+        public UserRepository UserRepository => _userRepository ?? (_userRepository = new UserRepository(_context));
     }
 }

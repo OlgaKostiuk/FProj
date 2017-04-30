@@ -3,59 +3,59 @@
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container body-content">
+    <h2>Film Details</h2>
 
-<h2>Film Details</h2>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            @if (Model.Poster != null)
+            {
+                <img class="img-thumbnail poster" src="@Model.Poster.Path" />
+            }
+        </div>
+        <div class="col-md-8">
+            <h3><b>@Model.Title</b></h3>
+            <table class="table table-responsive table-hover" style="text-align:justify">
+                <tr>
+                    <td>Director</td>
+                    <td>@Model.Director</td>
+                </tr>
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        @if (Model.Poster != null)
-        {
-            <img class="img-thumbnail poster" src="@Model.Poster.Path" />
-        }
-    </div>
-    <div class="col-md-8">
-        <h3><b>@Model.Title</b></h3>
-        <table class="table table-responsive table-hover" style="text-align:justify">
-            <tr>
-                <td>Director</td>
-                <td>@Model.Director</td>
-            </tr>
+                <tr>
+                    <td>Duration</td>
+                    <td>@Model.Duration min</td>
+                </tr>
 
-            <tr>
-                <td>Duration</td>
-                <td>@Model.Duration min</td>
-            </tr>
+                <tr>
+                    <td>Premiere Date</td>
+                    <td>@Model.PremiereDate.ToShortDateString()</td>
+                </tr>
 
-            <tr>
-                <td>Premiere Date</td>
-                <td>@Model.PremiereDate.ToShortDateString()</td>
-            </tr>
+                <tr>
+                    <td>Rate</td>
+                    <td>@Model.Rate+</td>
+                </tr>
 
-            <tr>
-                <td>Rate</td>
-                <td>@Model.Rate+</td>
-            </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>@Model.Description</td>
+                </tr>
 
-            <tr>
-                <td>Description</td>
-                <td>@Model.Description</td>
-            </tr>
-
-            <tr>
-                <td>Poster</td>
-                <td>
-                    <form id="FormData" enctype="multipart/form-data">
-                        <input class="form-control" type="hidden" name="Id" value="@Model.Id" />
-                        <input class="form-control" type="file" name="file" accept="image/jpeg,image/png,image/gif"/>
-                        <button id="uploader" class="btn btn-primary">Upload</button>
-                    </form>
-                </td>
-            </tr>
-        </table>
+                <tr>
+                    <td>Poster</td>
+                    <td>
+                        <form id="FormData" enctype="multipart/form-data">
+                            <input class="form-control" type="hidden" name="Id" value="@Model.Id" />
+                            <input class="form-control" type="file" name="file" accept="image/jpeg,image/png,image/gif" />
+                            <button id="uploader" class="btn btn-primary">Upload</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
-
-<script>
+    <script>
     $(function () {
         $("#uploader").click(submitUpload);
 
@@ -80,4 +80,4 @@
         }
 
     });
-</script>
+    </script>

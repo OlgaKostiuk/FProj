@@ -25,7 +25,7 @@ namespace FProj.Web.Controllers
         {
             var data = request == null ? UnitOfWork.Instance.FilmRepository.GetPage(1) : UnitOfWork.Instance.FilmRepository.GetPage(request.PageNumber, request.CountPerPage);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return PartialView("FilmList", data.Data);
         }
 
         public ActionResult Details(int Id) => View(UnitOfWork.Instance.FilmRepository.GetById(Id));

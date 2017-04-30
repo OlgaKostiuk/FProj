@@ -3,74 +3,74 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container body-content">
+    <h2>Create</h2>
 
-<h2>Create</h2>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <img class="img-thumbnail poster" src="" />
+        </div>
+        <div class="col-md-8">
+            @using (Html.BeginForm("Create", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <table class="table table-responsive table-hover" style="text-align: justify">
+                    <tr>
+                        <td>Title</td>
+                        <td><input class="form-control" type="text" name="Title" value="@Model.Title" /></td>
+                    </tr>
+                    <tr>
+                        <td>Director</td>
+                        <td><input class="form-control" type="text" name="Director" value="@Model.Director" /></td>
+                    </tr>
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        <img class="img-thumbnail poster" src="" />
-    </div>
-    <div class="col-md-8">
-        @using (Html.BeginForm("Create", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <table class="table table-responsive table-hover" style="text-align: justify">
-                <tr>
-                    <td>Title</td>
-                    <td><input class="form-control" type="text" name="Title" value="@Model.Title" /></td>
-                </tr>
-                <tr>
-                    <td>Director</td>
-                    <td><input class="form-control" type="text" name="Director" value="@Model.Director" /></td>
-                </tr>
+                    <tr>
+                        <td>Duration</td>
+                        <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" /></td>
+                    </tr>
 
-                <tr>
-                    <td>Duration</td>
-                    <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" /></td>
-                </tr>
+                    <tr>
+                        <td>Premiere Date</td>
+                        <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" /></td>
+                    </tr>
 
-                <tr>
-                    <td>Premiere Date</td>
-                    <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" /></td>
-                </tr>
+                    <tr>
+                        <td>Rate</td>
+                        <td><input class="form-control" type="text" name="Rate" value="@Model.Rate" /></td>
+                    </tr>
 
-                <tr>
-                    <td>Rate</td>
-                    <td><input class="form-control" type="text" name="Rate" value="@Model.Rate" /></td>
-                </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><textarea class="form-control" type="text" name="Description" value="@Model.Description"> </textarea></td>
+                    </tr>
 
-                <tr>
-                    <td>Description</td>
-                    <td><textarea class="form-control" type="text" name="Description" value="@Model.Description"> </textarea></td>
-                </tr>
+                    <tr>
+                        <td>Poster</td>
+                        <td>
+                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" />
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+            }
 
-                <tr>
-                    <td>Poster</td>
-                    <td>
-                        <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" />
-                    </td>
-                </tr>
-            </table>
-            <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-        }
-
+        </div>
     </div>
 </div>
+    <script>
+        $(function () {
+            $("#file").on("change",
+                function () {
 
-<script>
-    $(function () {
-        $("#file").on("change",
-            function () {
+                    if ($(this)[0].files.length == 0) return;
 
-                if ($(this)[0].files.length == 0) return;
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('.poster').attr('src', e.target.result);
+                    }
 
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('.poster').attr('src', e.target.result);
-                }
+                    reader.readAsDataURL($(this)[0].files[0]);
+                    return;
+                });
+        });
 
-                reader.readAsDataURL($(this)[0].files[0]);
-                return;
-            });
-    });
-
-</script>
+    </script>
