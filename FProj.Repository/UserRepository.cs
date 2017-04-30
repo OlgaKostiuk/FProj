@@ -1,8 +1,6 @@
-﻿using System;
-using FProj.Api;
+﻿using FProj.Api;
 using FProj.Data;
 using FProj.Repository.Base;
-using System.Data;
 using System.Linq;
 using System.Web.Helpers;
 
@@ -21,7 +19,7 @@ namespace FProj.Repository
 
         public UserApi Add(UserApi user, string password)
         {
-            if (_dbContext.UserAccount.Any(x => x.Email == user.Email)) throw new Exception("Email has already been used.");
+            if (IsEmailUsed(user.Email)) return null;
 
             var userData = ApiToData.UserApiToData(user);
             var salt = Crypto.GenerateSalt();
@@ -39,6 +37,25 @@ namespace FProj.Repository
             _dbContext.SaveChanges();
 
             return DataToApi.UserToApi(userData);
+        }
+
+        public bool IsEmailUsed(string email)
+        {
+            return _dbContext.UserAccount.Any(x => x.Email == email);
+        }
+
+        public UserApi GetUserByEmail(string email)
+        {
+            var user = _dbContext.User.FirstOrDefault(x => x.UserAccount.Email == email);
+
+            return user == null ? null : DataToApi.UserToApi(user);
+        }
+
+        public UserApi UserVerification(string email, string password)
+        {
+            var account = _dbContext.UserAccount.FirstOrDefault(x => x.Email == email);
+
+            return account != null && Crypto.VerifyHashedPassword(account.Password.Replace(account.Salt, ""), password) ? GetUserByEmail(email) : null;
         }
     }
 }

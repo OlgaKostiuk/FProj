@@ -8,7 +8,7 @@
 
     <div class="col-md-12">
         <div class="col-md-4">
-            <img class="img-thumbnail poster" src="" />
+            <img class="img-thumbnail poster" src="/images/default.jpg" />
         </div>
         <div class="col-md-8">
             @using (Html.BeginForm("Create", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -16,47 +16,58 @@
                 <table class="table table-responsive table-hover" style="text-align: justify">
                     <tr>
                         <td>Title</td>
-                        <td><input class="form-control" type="text" name="Title" value="@Model.Title" /></td>
+                        <td><input class="form-control" type="text" name="Title" value="@Model.Title" required="required"/></td>
                     </tr>
                     <tr>
                         <td>Director</td>
-                        <td><input class="form-control" type="text" name="Director" value="@Model.Director" /></td>
+                        <td><input class="form-control" type="text" name="Director" value="@Model.Director" required="required"/></td>
                     </tr>
 
                     <tr>
                         <td>Duration</td>
-                        <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" /></td>
+                        <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" required="required"/></td>
                     </tr>
 
                     <tr>
                         <td>Premiere Date</td>
-                        <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" /></td>
+                        <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" required="required"/></td>
                     </tr>
 
                     <tr>
                         <td>Rate</td>
-                        <td><input class="form-control" type="text" name="Rate" value="@Model.Rate" /></td>
+                        <td><input class="form-control" type="text" name="Rate" value="@Model.Rate" required="required"/></td>
                     </tr>
 
                     <tr>
                         <td>Description</td>
-                        <td><textarea class="form-control" type="text" name="Description" value="@Model.Description"> </textarea></td>
+                        <td><textarea class="form-control" type="text" name="Description" value="@Model.Description" required="required"></textarea></td>
                     </tr>
 
                     <tr>
                         <td>Poster</td>
                         <td>
-                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" />
+                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" required="required"/>
                         </td>
                     </tr>
                     <tr>
                         <td>Frames</td>
                         <td>
-                            <input class="form-control" type="file" id="frames" name="frames" accept="image/jpeg,image/png,image/gif" multiple="multiple" />
+                            <input class="form-control" type="file" id="frames" name="frames" accept="image/jpeg,image/png,image/gif" multiple="multiple" required="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="col-md-12 frames">
+                                <img class="img-thumbnail" src="/images/default.jpg"/>
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                            </div>
                         </td>
                     </tr>
                 </table>
-                <div class="col-md-12 frames"></div>
+                
                 <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
             }
 
@@ -87,7 +98,7 @@
                     $("div.frames").append(`<img class="img-thumbnail" src="${e.target.result}"/>`);
                 }
 
-                reader.onloadend = function(e) {
+                reader.onloadend = function() {
                     index++;
                     if (index >= $("#frames")[0].files.length) return;
 

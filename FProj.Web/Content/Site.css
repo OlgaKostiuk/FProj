@@ -39,10 +39,7 @@ textarea {
 }
 
 .frames {
-    background: lightgray;
     height: 100px;
-    border: 1px solid black;
-    border-radius: 10px;
     overflow: auto;
     display: flex;
     align-items: center;
@@ -82,4 +79,9 @@ textarea {
     height: 500px;
     width: auto;
     z-index: 10000;
+}
+
+.delete {
+    margin-top: 10px;
+    padding: 7px 20px;
 }
