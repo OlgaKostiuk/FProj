@@ -13,7 +13,20 @@ namespace FProj.Web.Controllers
     public class FilmController : Controller
     {
         // GET: Film
-        public ActionResult Index() => View(UnitOfWork.Instance.FilmRepository.GetAll());
+        public ActionResult Index()
+        {
+            var data = UnitOfWork.Instance.FilmRepository.GetPage(1);
+
+            return View(data);
+        }
+
+        [HttpGet]
+        public ActionResult GetPage(PageRequest request)
+        {
+            var data = request == null ? UnitOfWork.Instance.FilmRepository.GetPage(1) : UnitOfWork.Instance.FilmRepository.GetPage(request.PageNumber, request.CountPerPage);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Details(int Id) => View(UnitOfWork.Instance.FilmRepository.GetById(Id));
 

@@ -54,6 +54,8 @@
     <Compile Include="Models\ImageApi.cs" />
     <Compile Include="Models\UserApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Request\PageRequest.cs" />
+    <Compile Include="Response\ResponsePage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FProj.Data\FProj.Data.csproj">
