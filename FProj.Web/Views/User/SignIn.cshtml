@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Sign In";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container body-content">
+    <h2>Sign In</h2>
+
+    <div class="col-md-12">
+        @using (Html.BeginForm("SignIn", "User", FormMethod.Post))
+        {
+            <table class="table table-responsive">
+                <tr>
+                    <td>Email</td>
+                    <td>
+                        <input class="form-control" type="email" name="email" required="required" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input class="form-control" type="password" name="password" required="required" />
+                    </td>
+                </tr>
+            </table>
+            <button class="btn btn-danger" type="submit">Submit</button>
+        }
+
+    </div>
+</div>

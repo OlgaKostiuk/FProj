@@ -3,64 +3,79 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container body-content">
+    <h2>Create</h2>
 
-<h2>Create</h2>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <img class="img-thumbnail poster" src="/images/default.jpg" />
+        </div>
+        <div class="col-md-8">
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        <img class="img-thumbnail poster" src="" />
-    </div>
-    <div class="col-md-8">
-        @using (Html.BeginForm("Create", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <table class="table table-responsive table-hover" style="text-align: justify">
-                <tr>
-                    <td>Title</td>
-                    <td><input class="form-control" type="text" name="Title" value="@Model.Title" required /></td>
-                </tr>
-                <tr>
-                    <td>Director</td>
-                    <td><input class="form-control" type="text" name="Director" value="@Model.Director" /></td>
-                </tr>
+            @using (Html.BeginForm("Create", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <table class="table table-responsive table-hover" style="text-align: justify">
+                    <tr>
+                        <td>Title</td>
+                        <td><input class="form-control" type="text" name="Title" value="@Model.Title" required="required" /></td>
+                    </tr>
+                    <tr>
+                        <td>Director</td>
+                        <td><input class="form-control" type="text" name="Director" value="@Model.Director" required="required" /></td>
+                    </tr>
 
-                <tr>
-                    <td>Duration</td>
-                    <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" /></td>
-                </tr>
+                    <tr>
+                        <td>Duration</td>
+                        <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" required="required" /></td>
+                    </tr>
+                    <tr>
+                        <td>Premiere Date</td>
+                        <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" required="required" min="1753-01-01" /></td>
+                    </tr>
 
-                <tr>
-                    <td>Premiere Date</td>
-                    <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" min="1753-01-01" /></td>
-                </tr>
+                    <tr>
+                        <td>Rate</td>
+                        <td><input class="form-control" type="text" name="Rate" value="@Model.Rate" required="required" /></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><textarea class="form-control" type="text" name="Description" value="@Model.Description" required="required"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Poster</td>
+                        <td>
+                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" required="required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Frames</td>
+                        <td>
+                            <input class="form-control" type="file" id="frames" name="frames" accept="image/jpeg,image/png,image/gif" multiple="multiple" required="required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="col-md-12 frames">
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                                <img class="img-thumbnail" src="/images/default.jpg" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
 
-                <tr>
-                    <td>Rate</td>
-                    <td><input class="form-control" type="text" name="Rate" value="@Model.Rate" /></td>
-                </tr>
+                                <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+            }
 
-                <tr>
-                    <td>Description</td>
-                    <td><textarea class="form-control" type="text" name="Description" value="@Model.Description" required ></textarea></td>
-                </tr>
-
-                <tr>
-                    <td>Poster</td>
-                    <td>
-                        <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" />
-                    </td>
-                </tr>
-            </table>
-            <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-        }
-
+        </div>
     </div>
 </div>
-
 <script>
     $(function () {
         $("#file").on("change",
             function () {
-
                 if ($(this)[0].files.length == 0) return;
 
                 var reader = new FileReader();
@@ -71,6 +86,26 @@
                 reader.readAsDataURL($(this)[0].files[0]);
                 return;
             });
+
+        $("#frames").on("change", function () {
+            if ($(this)[0].files.length == 0) return;
+            $("div.frames").html("");
+            let index = 0;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("div.frames").append(`<img class="img-thumbnail" src="${e.target.result}"/>`);
+            }
+
+            reader.onloadend = function () {
+                index++;
+                if (index >= $("#frames")[0].files.length) return;
+
+                reader.readAsDataURL($("#frames")[0].files[index]);
+            }
+
+            reader.readAsDataURL($(this)[0].files[index]);
+            return;
+        });
     });
 
 </script>

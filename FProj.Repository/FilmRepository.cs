@@ -74,5 +74,26 @@ namespace FProj.Repository
 
             return DataToApi.FilmToApi(newData);
         }
+
+        public ResponsePage<FilmApi> GetPage(int page, int size = 5)
+        {
+            var filmApi = _dbContext.Film.OrderByDescending(x => x.DateCreated)
+                .Where(x => !x.IsDeleted)
+                .Skip((page - 1) * size)
+                .Take(size)
+                .ToList()
+                .Select(DataToApi.FilmToApi)
+                .ToList();
+
+            int count = _dbContext.Film.Count(x => !x.IsDeleted) % size == 0
+                ? _dbContext.Film.Count(x => !x.IsDeleted) / size
+                : _dbContext.Film.Count(x => !x.IsDeleted) / size + 1;
+
+            return new ResponsePage<FilmApi>()
+            {
+                Data = filmApi,
+                Count = count
+            };
+        }
     }
 }

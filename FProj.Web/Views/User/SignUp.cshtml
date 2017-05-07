@@ -1,0 +1,48 @@
+﻿@model FProj.Api.UserApi
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container body-content">
+    <h2>Sign Up</h2>
+
+    <div class="col-md-12">
+        @using (Html.BeginForm("SignUp", "User", FormMethod.Post))
+        {
+            <table class="table table-responsive">
+                <tr>
+                    <td>First Name</td>
+                    <td>
+                        <input class="form-control" type="text" name="FirstName" required="required"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Last Name</td>
+                    <td>
+                        <input class="form-control" type="text" name="LastName" required="required" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Login</td>
+                    <td>
+                        <input class="form-control" type="text" name="Login" required="required"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>
+                        <input class="form-control" type="email" name="Email" required="required"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input class="form-control" type="password" name="password" required="required"/>
+                    </td>
+                </tr>
+            </table>
+            <button class="btn btn-danger" type="submit">Submit</button>
+        }
+
+    </div>
+</div>

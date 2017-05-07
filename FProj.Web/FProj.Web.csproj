@@ -148,6 +148,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FilmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -167,6 +168,7 @@
     <Content Include="images\501.jpg" />
     <Content Include="images\502.jpg" />
     <Content Include="images\555.jpg" />
+    <Content Include="images\default.jpg" />
     <Content Include="images\main\main1.jpg" />
     <Content Include="images\main\main2.jpg" />
     <Content Include="images\main\main3.jpg" />
@@ -208,6 +210,9 @@
     <Content Include="Views\Film\Index.cshtml" />
     <Content Include="Views\Film\Details.cshtml" />
     <Content Include="Views\Film\Create.cshtml" />
+    <Content Include="Views\Film\FilmList.cshtml" />
+    <Content Include="Views\User\SignUp.cshtml" />
+    <Content Include="Views\User\SignIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

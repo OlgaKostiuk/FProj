@@ -3,61 +3,71 @@
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="container body-content">
+    <h2>Film Details</h2>
 
-<h2>Film Details</h2>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <img class="img-thumbnail poster" src="@Model.Poster?.Path" onerror="this.src = '/images/default.jpg'"/>
+        </div>
+        <div class="col-md-8">
+            <h3><b>@Model.Title</b></h3>
+            <table class="table table-responsive table-hover" style="text-align:justify">
+                <tr>
+                    <td>Director</td>
+                    <td>@Model.Director</td>
+                </tr>
 
-<div class="col-md-12">
-    <div class="col-md-4">
-        @if (@Model.Poster != null)
-        {
-            <img class="img-thumbnail poster" src="@Model.Poster.Path" />
-        }
-    </div>
-    <div class="col-md-8">
-        <h3><b>@Model.Title</b></h3>
-        <table class="table table-responsive table-hover" style="text-align:justify">
-            <tr>
-                <td>Director</td>
-                <td>@Model.Director</td>
-            </tr>
+                <tr>
+                    <td>Duration</td>
+                    <td>@Model.Duration min</td>
+                </tr>
 
-            <tr>
-                <td>Duration</td>
-                <td>@Model.Duration min</td>
-            </tr>
+                <tr>
+                    <td>Premiere Date</td>
+                    <td>@Model.PremiereDate.ToShortDateString()</td>
+                </tr>
 
-            <tr>
-                <td>Premiere Date</td>
-                <td>@Model.PremiereDate.ToShortDateString()</td>
-            </tr>
+                <tr>
+                    <td>Rate</td>
+                    <td>@Model.Rate+</td>
+                </tr>
 
-            <tr>
-                <td>Rate</td>
-                <td>@Model.Rate+</td>
-            </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>@Model.Description</td>
+                </tr>
 
-            <tr>
-                <td>Description</td>
-                <td>@Model.Description</td>
-            </tr>
 
-            <tr>
-                <td>Poster</td>
-                <td>
-                    <form id="FormData" enctype="multipart/form-data">
-                        <input class="form-control" type="hidden" name="Id" value="@Model.Id" />
-                        <input class="form-control" type="file" name="file" accept="image/jpeg,image/png,image/gif"/>
-                        <button id="uploader" class="btn btn-primary">Upload</button>
-                    </form>
-                </td>
-            </tr>
-        </table>
+            </table>
+        </div>
+        <div class="col-md-12" style="clear: both">
+            @foreach (var img in Model.Pictures)
+            {
+                <img class="img-thumbnail picture" src="@img.Path" />
+            }
+        </div>
     </div>
 </div>
 
+<div id="preview" style="display: none;">
+    <img id="fullscreen" class="img-responsive" />
+</div>
 <script>
     $(function () {
         $("#uploader").click(submitUpload);
+
+        $("#fullscreen").click(function() {
+             $("#preview").fadeOut("fast").css("display", "none");
+        });
+
+        $(".picture").click(function() {
+            let src = $(this).attr("src");
+            $("#fullscreen").attr("src", src);
+
+            if (!$("#preview").is(":visible"))
+                $("#preview").fadeIn("fast").css("display", "flex");
+        });
 
         function submitUpload() {
             var formData = new FormData($("#FormData")[0]);
@@ -77,7 +87,6 @@
                 processData: false
             });
             return false;
-        }
-
+        };
     });
 </script>
