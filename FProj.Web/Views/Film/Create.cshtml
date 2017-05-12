@@ -1,18 +1,18 @@
 ﻿@model FProj.Api.FilmApi
+
 @{
-    ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container body-content">
-    <h2>Create</h2>
+    <h2>@ViewBag.Title</h2>
 
     <div class="col-md-12">
         <div class="col-md-4">
-            <img class="img-thumbnail poster" src="/images/default.jpg" />
+            <img class="img-thumbnail poster" src="@(Model.Poster?.Path ?? @"/images/default.jpg")" onerror="this.src = '/images/default.jpg'" />
         </div>
         <div class="col-md-8">
 
-            @using (Html.BeginForm("Create", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm((string)ViewBag.Title, "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 <table class="table table-responsive table-hover" style="text-align: justify">
                     <tr>
@@ -24,13 +24,24 @@
                         <td><input class="form-control" type="text" name="Director" value="@Model.Director" required="required" /></td>
                     </tr>
 
+                    @*How to make without ViewBag???*@
+                    <tr>
+                        <td>Genres</td>
+                        <td><select multiple="multiple" name="Genres" class="form-control">
+                            @foreach (var genre in ViewBag.Genres)
+                            {
+                                <option value="@genre.Id" @(Model.Genres?.FirstOrDefault(x => x.Id == genre.Id) != null ? "selected" : "")>@genre.Title</option>
+                            }
+                            </select></td>
+                    </tr>
+
                     <tr>
                         <td>Duration</td>
                         <td><input class="form-control" type="number" name="Duration" min="0" value="@Model.Duration" required="required" /></td>
                     </tr>
                     <tr>
                         <td>Premiere Date</td>
-                        <td><input class="form-control" type="date" name="PremiereDate" value="@Model.PremiereDate" required="required" min="1753-01-01" /></td>
+                        <td><input class="form-control" type="date" name="PremiereDate" value="@string.Format("{0:yyyy-MM-dd}", Model.PremiereDate)" required="required" min="1753-01-01" /></td>
                     </tr>
 
                     <tr>
@@ -39,34 +50,44 @@
                     </tr>
                     <tr>
                         <td>Description</td>
-                        <td><textarea class="form-control" type="text" name="Description" value="@Model.Description" required="required"></textarea></td>
+                        <td><textarea class="form-control" type="text" name="Description" required="required">@(Model.Description)</textarea></td>
                     </tr>
                     <tr>
                         <td>Poster</td>
                         <td>
-                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" required="required" />
+                            <input class="form-control" type="file" id="file" name="file" accept="image/jpeg,image/png,image/gif" />
                         </td>
                     </tr>
                     <tr>
                         <td>Frames</td>
                         <td>
-                            <input class="form-control" type="file" id="frames" name="frames" accept="image/jpeg,image/png,image/gif" multiple="multiple" required="required" />
+                            <input class="form-control" type="file" id="frames" name="frames" accept="image/jpeg,image/png,image/gif" multiple="multiple" />
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <div class="col-md-12 frames">
-                                <img class="img-thumbnail" src="/images/default.jpg" />
-                                <img class="img-thumbnail" src="/images/default.jpg" />
-                                <img class="img-thumbnail" src="/images/default.jpg" />
-                                <img class="img-thumbnail" src="/images/default.jpg" />
-                                <img class="img-thumbnail" src="/images/default.jpg" />
+                            <div class="col-md-12 frames" style="clear: both">
+                                @if (Model.Pictures != null && Model.Pictures.Count != 0)
+                                {
+                                    foreach (var img in Model.Pictures)
+                                    {
+                                        <img class="img-thumbnail picture" src="@img.Path" />
+                                    }
+                                }
+                                else
+                                {
+                                    <img class="img-thumbnail" src="/images/default.jpg" />
+                                    <img class="img-thumbnail" src="/images/default.jpg" />
+                                    <img class="img-thumbnail" src="/images/default.jpg" />
+                                    <img class="img-thumbnail" src="/images/default.jpg" />
+                                    <img class="img-thumbnail" src="/images/default.jpg" />
+                                }
                             </div>
                         </td>
                     </tr>
                 </table>
 
-                                <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                                <button type="submit" class="btn btn-primary" id="saveBtn" @*formaction="@Url.Action(ViewBag.Title)"*@>Save</button>
             }
 
         </div>
@@ -87,25 +108,26 @@
                 return;
             });
 
-        $("#frames").on("change", function () {
-            if ($(this)[0].files.length == 0) return;
-            $("div.frames").html("");
-            let index = 0;
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $("div.frames").append(`<img class="img-thumbnail" src="${e.target.result}"/>`);
-            }
+        $("#frames").on("change",
+            function () {
+                if ($(this)[0].files.length == 0) return;
+                $("div.frames").html("");
+                let index = 0;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("div.frames").append(`<img class="img-thumbnail" src="${e.target.result}"/>`);
+                }
 
-            reader.onloadend = function () {
-                index++;
-                if (index >= $("#frames")[0].files.length) return;
+                reader.onloadend = function () {
+                    index++;
+                    if (index >= $("#frames")[0].files.length) return;
 
-                reader.readAsDataURL($("#frames")[0].files[index]);
-            }
+                    reader.readAsDataURL($("#frames")[0].files[index]);
+                }
 
-            reader.readAsDataURL($(this)[0].files[index]);
-            return;
-        });
+                reader.readAsDataURL($(this)[0].files[index]);
+                return;
+            });
     });
 
 </script>

@@ -20,7 +20,8 @@ namespace FProj.Api
                 Rate = film.Rate,
                 User = UserToApi(film.UserCreator),
                 Poster = ImageToApi(film.Images.FirstOrDefault(x => !x.IsDeleted && x.IsPoster)),
-                Pictures = film.Images?.Where(x => !x.IsPoster && !x.IsDeleted).Select(x => ImageToApi(x)).ToList()
+                Pictures = film.Images?.Where(x => !x.IsPoster && !x.IsDeleted).Select(x => ImageToApi(x)).ToList(),
+                Genres = film.Genres?.Select(x => GenreToApi(x)).ToList()
             };
         }
 

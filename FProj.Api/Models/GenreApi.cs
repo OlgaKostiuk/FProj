@@ -1,6 +1,6 @@
 ﻿namespace FProj.Api
 {
-    public class GenreApi
+    public class GenreApi : IId
     {
         public int Id { get; set; }
         public string Title { get; set; }

@@ -2,9 +2,9 @@
 <div id="body">
     @foreach (var film in Model)
     {
-        <div class="col-md-12">
+        <div class="row">
             <div class="col-md-4">
-                <img class="img-thumbnail poster" src="@film.Poster?.Path" onerror="this.src = '/images/default.jpg'" />
+                <img class="img-thumbnail poster" src="@(film.Poster?.Path ?? @"/images/default.jpg")" onerror="this.src = '/images/default.jpg'" />
             </div>
             <div class="col-md-8">
                 <h3><b>@film.Title</b></h3>
@@ -12,6 +12,15 @@
                     <tr>
                         <td>Director</td>
                         <td>@film.Director</td>
+                    </tr>
+
+                    <tr>
+                        <td>Genres</td>
+                        <td>@foreach(var item in film.Genres)
+                        {
+                            @(item.Title + " ")
+                        }
+                        </td>
                     </tr>
 
                     <tr>
@@ -39,7 +48,8 @@
                             <button class="btn btn-primary details" data-id="@film.Id">Details</button>
                         </td>
                         <td>
-                            <button class="btn btn-danger delete" data-id="@film.Id">Delete</button>
+                            <button class="btn btn-danger delete" data-id="@film.Id">Delete</button>                       
+                            <button class="btn btn-warning edit" data-id="@film.Id">Edit</button>
                         </td>
                     </tr>
                 </table>
@@ -48,9 +58,15 @@
     }
 </div>
 <script>
-        $(function() {
-            $(".details").click(function() {
-                location.href = '@Url.Action("Details")/' + $(this).attr("data-id");
-            });
+    $(function() {
+        $(".details").click(function() {
+            location.href = '@Url.Action("Details")/' + $(this).attr("data-id");
         });
+    });
+
+    $(function () {
+        $(".edit").click(function () {
+            location.href = '@Url.Action("Edit")/' + $(this).attr("data-id");
+        });
+    });
 </script>

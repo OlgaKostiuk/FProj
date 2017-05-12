@@ -17,5 +17,6 @@ namespace FProj.Api
         public UserApi User { get; set; }
         public ImageApi Poster { get; set; }
         public List<ImageApi> Pictures { get; set; }
+        public List<GenreApi> Genres { get; set; }
     }
 }

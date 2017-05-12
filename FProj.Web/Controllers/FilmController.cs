@@ -3,6 +3,7 @@ using FProj.Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -40,17 +41,29 @@ namespace FProj.Web.Controllers
             return Json(new { Ok = true, Path = WebConfigurationManager.AppSettings["ImageFolder"] + path });
         }
 
-        public ActionResult Create() => View(UnitOfWork.Instance.FilmRepository.Default());
+        public ActionResult Create()
+        {
+            ViewBag.Title = "Create";
+            ViewBag.Genres = UnitOfWork.Instance.GenreRepository.GetAll();
+            return View(UnitOfWork.Instance.FilmRepository.Default());
+        } 
 
         [HttpPost]
-        public ActionResult Create(FilmApi model, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
+        public ActionResult Create(FilmApi model, int[] Genres, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
         {
             model.DateCreated = DateTime.Now;
             var film = UnitOfWork.Instance.FilmRepository.Create(model);
+
+            //model.Genres.Count();
+            foreach(var item in Genres)
+            {
+                UnitOfWork.Instance.FilmRepository.AddGenre(film, item);
+            }
+           
             if (file != null)
                 UploadPoster(film.Id, file);
 
-            if (frames != null)
+            if (frames.FirstOrDefault() != null)
             {
                 var filesApi = new List<ImageApi>();
                 foreach (var frame in frames)
@@ -66,5 +79,46 @@ namespace FProj.Web.Controllers
 
             return RedirectToAction("Details", new { Id = film.Id });
         }
+
+        public ActionResult Edit(int Id)
+        {
+            ViewBag.Title = "Edit";
+            ViewBag.Genres = UnitOfWork.Instance.GenreRepository.GetAll();
+            return View("Create", UnitOfWork.Instance.FilmRepository.GetById(Id));
+        }
+
+        [HttpPost]
+        public ActionResult Edit(FilmApi model, int[] Genres, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
+        {
+
+            var film = UnitOfWork.Instance.FilmRepository.Update(model);
+
+            //model.Genres.Count();
+            UnitOfWork.Instance.FilmRepository.RemoveGenres(film);
+            foreach (var item in Genres)
+            {
+                UnitOfWork.Instance.FilmRepository.AddGenre(film, item);
+            }
+
+            if (file != null)
+                UploadPoster(film.Id, file);
+
+            if (frames.FirstOrDefault() != null)
+            {
+                var filesApi = new List<ImageApi>();
+                foreach (var frame in frames)
+                {
+                    string uniqueName = Guid.NewGuid().ToString() + Path.GetExtension(frame.FileName);
+                    string localPath = Path.Combine(Server.MapPath($"~{WebConfigurationManager.AppSettings["ImageFolder"]}"), uniqueName);
+
+                    frame.SaveAs(localPath);
+                    filesApi.Add(new ImageApi() { Path = uniqueName });
+                }
+                UnitOfWork.Instance.ImageRepository.AddPictures(filesApi, film.Id);
+            }
+
+            return RedirectToAction("Details", new { Id = film.Id });
+        }
+        
     }
 }

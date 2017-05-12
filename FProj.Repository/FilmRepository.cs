@@ -66,13 +66,14 @@ namespace FProj.Repository
         {
             var original = _dbContext.Film.FirstOrDefault(x => x.Id == model.Id);
             if (original == null) return null;
-
+            model.DateCreated = original.DateCreated;
+            model.User = DataToApi.UserToApi(original.UserCreator);
             var newData = ApiToData.FilmApiToData(model);
 
             _dbContext.Entry(original).CurrentValues.SetValues(newData);
             _dbContext.SaveChanges();
 
-            return DataToApi.FilmToApi(newData);
+            return DataToApi.FilmToApi(original);
         }
 
         public ResponsePage<FilmApi> GetPage(int page, int size = 5)
@@ -94,6 +95,22 @@ namespace FProj.Repository
                 Data = filmApi,
                 Count = count
             };
+        }
+
+        public void AddGenre(FilmApi film, int GenreId)
+        {
+            Genre genreData = _dbContext.Genre.FirstOrDefault(x => x.Id == GenreId);
+            Film filmData = _dbContext.Film.FirstOrDefault(x => x.Id == film.Id);
+            if (genreData == null || filmData == null) return;
+            filmData.Genres.Add(genreData);
+            _dbContext.SaveChanges();
+        }
+        public void RemoveGenres(FilmApi film)
+        {
+            Film filmData = _dbContext.Film.FirstOrDefault(x => x.Id == film.Id);
+            if (filmData == null) return;
+            filmData.Genres.Clear();
+            _dbContext.SaveChanges();
         }
     }
 }

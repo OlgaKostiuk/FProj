@@ -8,7 +8,7 @@
 
     <div class="col-md-12">
         <div class="col-md-4">
-            <img class="img-thumbnail poster" src="@Model.Poster?.Path" onerror="this.src = '/images/default.jpg'"/>
+            <img class="img-thumbnail poster" src="@(Model.Poster?.Path ?? @"/images/default.jpg")" onerror="this.src = '/images/default.jpg'"/>
         </div>
         <div class="col-md-8">
             <h3><b>@Model.Title</b></h3>
@@ -16,6 +16,16 @@
                 <tr>
                     <td>Director</td>
                     <td>@Model.Director</td>
+                </tr>
+
+                <tr>
+                    <td>Genres</td>
+                    <td>
+                        @foreach (var item in Model.Genres)
+                    {
+                        @(item.Title + " ")
+                    }
+                    </td>
                 </tr>
 
                 <tr>

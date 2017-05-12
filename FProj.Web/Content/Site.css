@@ -81,7 +81,12 @@ textarea {
     z-index: 10000;
 }
 
-.delete {
+.delete, .edit {
     margin-top: 10px;
     padding: 7px 20px;
+    margin-right: 12px;
+}
+
+input, select, textarea {
+    max-width: 100%;
 }

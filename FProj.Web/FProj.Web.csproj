@@ -147,6 +147,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FilmController.cs" />
+    <Compile Include="Controllers\GenreController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -213,6 +214,7 @@
     <Content Include="Views\Film\FilmList.cshtml" />
     <Content Include="Views\User\SignUp.cshtml" />
     <Content Include="Views\User\SignIn.cshtml" />
+    <Content Include="Views\Genre\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

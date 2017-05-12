@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Base\BaseRepository.cs" />
     <Compile Include="FilmRepository.cs" />
+    <Compile Include="GenreRepository.cs" />
     <Compile Include="ImageRepository.cs" />
     <Compile Include="Interfaces\ICrud.cs" />
     <Compile Include="Interfaces\IFetch.cs" />
