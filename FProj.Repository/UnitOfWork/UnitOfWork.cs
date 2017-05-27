@@ -25,5 +25,8 @@ namespace FProj.Repository
 
         private GenreRepository _genreRepository;
         public GenreRepository GenreRepository => _genreRepository ?? (_genreRepository = new GenreRepository(_context));
+
+        private ActorRepository _actorRepository;
+        public ActorRepository ActorRepository => _actorRepository ?? (_actorRepository = new ActorRepository(_context));
     }
 }

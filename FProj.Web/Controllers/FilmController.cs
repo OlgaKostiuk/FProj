@@ -30,6 +30,7 @@ namespace FProj.Web.Controllers
 
         public ActionResult Details(int Id) => View(UnitOfWork.Instance.FilmRepository.GetById(Id));
 
+        [Authorize]
         [HttpPost]
         public ActionResult UploadPoster(int Id, HttpPostedFileBase file, bool IsPoster = true)
         {
@@ -41,25 +42,50 @@ namespace FProj.Web.Controllers
             return Json(new { Ok = true, Path = WebConfigurationManager.AppSettings["ImageFolder"] + path });
         }
 
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.Title = "Create";
-            ViewBag.Genres = UnitOfWork.Instance.GenreRepository.GetAll();
-            return View(UnitOfWork.Instance.FilmRepository.Default());
-        } 
+            var filmsAndActors = new FilmViewModel()
+            {
+                Film = UnitOfWork.Instance.FilmRepository.Default(),
+                Actors = UnitOfWork.Instance.ActorRepository.GetAll(),
+                Genres = UnitOfWork.Instance.GenreRepository.GetAll()
+            };
+            return View(filmsAndActors);
+        }
 
+        [Authorize]
         [HttpPost]
-        public ActionResult Create(FilmApi model, int[] Genres, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
+        public ActionResult Create(FilmApi model, int[] Genres, int[] Actors, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
         {
+            //if (file == null)
+            //{
+            //    ModelState.AddModelError("Poster", "Film must have a poster");
+            //}
+
+            //if (!ModelState.IsValid) return View("Create");
+
             model.DateCreated = DateTime.Now;
+            model.User = UnitOfWork.Instance.UserRepository.GetUserByEmail(User.Identity.Name);
             var film = UnitOfWork.Instance.FilmRepository.Create(model);
 
-            //model.Genres.Count();
-            foreach(var item in Genres)
+            if (Genres != null)
             {
-                UnitOfWork.Instance.FilmRepository.AddGenre(film, item);
+                foreach (var item in Genres)
+                {
+                    UnitOfWork.Instance.FilmRepository.AddGenre(film, item);
+                }
             }
-           
+
+            if (Actors != null)
+            {
+                foreach (var item in Actors)
+                {
+                    UnitOfWork.Instance.FilmRepository.AddActor(film, item);
+                }
+            }
+
             if (file != null)
                 UploadPoster(film.Id, file);
 
@@ -80,26 +106,42 @@ namespace FProj.Web.Controllers
             return RedirectToAction("Details", new { Id = film.Id });
         }
 
+        [Authorize]
         public ActionResult Edit(int Id)
         {
             ViewBag.Title = "Edit";
-            ViewBag.Genres = UnitOfWork.Instance.GenreRepository.GetAll();
-            return View("Create", UnitOfWork.Instance.FilmRepository.GetById(Id));
+            var filmsAndActors = new FilmViewModel()
+            {
+                Film = UnitOfWork.Instance.FilmRepository.GetById(Id),
+                Actors = UnitOfWork.Instance.ActorRepository.GetAll(),
+                Genres = UnitOfWork.Instance.GenreRepository.GetAll()
+            };
+            return View("Create", filmsAndActors);
         }
 
+        [Authorize]
         [HttpPost]
-        public ActionResult Edit(FilmApi model, int[] Genres, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
+        public ActionResult Edit(FilmApi model, int[] Genres, int[] Actors, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> frames)
         {
 
             var film = UnitOfWork.Instance.FilmRepository.Update(model);
 
-            //model.Genres.Count();
             UnitOfWork.Instance.FilmRepository.RemoveGenres(film);
-            foreach (var item in Genres)
+            UnitOfWork.Instance.FilmRepository.RemoveActors(film);
+            if (Genres != null)
             {
-                UnitOfWork.Instance.FilmRepository.AddGenre(film, item);
+                foreach (var item in Genres)
+                {
+                    UnitOfWork.Instance.FilmRepository.AddGenre(film, item);
+                }
             }
-
+            if (Actors != null)
+            {
+                foreach (var item in Actors)
+                {
+                    UnitOfWork.Instance.FilmRepository.AddActor(film, item);
+                }
+            }
             if (file != null)
                 UploadPoster(film.Id, file);
 
@@ -119,6 +161,25 @@ namespace FProj.Web.Controllers
 
             return RedirectToAction("Details", new { Id = film.Id });
         }
-        
+
+        [Authorize]
+        public ActionResult MyFilms()
+        {
+            var user = UnitOfWork.Instance.UserRepository.GetUserByEmail(User.Identity.Name);
+            var data = UnitOfWork.Instance.FilmRepository.GetPage(1, user: user);
+
+            return View("MyFilmList", data);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult GetMyPage(PageRequest request)
+        {
+            var user = UnitOfWork.Instance.UserRepository.GetUserByEmail(User.Identity.Name);
+            var data = request == null ? UnitOfWork.Instance.FilmRepository.GetPage(1, user: user) : UnitOfWork.Instance.FilmRepository.GetPage(request.PageNumber, request.CountPerPage, user);
+
+            return PartialView("FilmList", data.Data);
+        }
+
     }
 }

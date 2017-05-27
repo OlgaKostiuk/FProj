@@ -13,6 +13,13 @@
     @Scripts.Render("~/bundles/modernizr")
 
     <script src="~/Scripts/holder.js" type="text/javascript"></script>
+
+    <!-- #region Chosen -->
+    <link rel="stylesheet" type="text/css" href="~/Content/chosen.min.css" />
+    <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script src="~/Scripts/chosen.proto.min.js"></script>
+    <!-- #endregion-->
+
 </head>
 <body>
     <div class="navbar-wrapper">
@@ -32,9 +39,17 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
                             <li>@Html.ActionLink("Film", "Index", "Film")</li>
-                            <li>@Html.ActionLink("Create", "Create", "Film")</li>
-                            <li>@Html.ActionLink("Sign Up", "SignUp", "User")</li>
-                            <li>@Html.ActionLink("Sign In", "SignIn", "User")</li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li>@Html.ActionLink("My films", "MyFilms", "Film")</li>
+                                <li>@Html.ActionLink("Create", "Create", "Film")</li>
+                                <li>@Html.ActionLink("Sign Out", "SignOut", "User")</li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink("Sign Up", "SignUp", "User")</li>
+                                <li>@Html.ActionLink("Sign In", "SignIn", "User")</li>
+                            }
                         </ul>
                     </div>
                 </div>

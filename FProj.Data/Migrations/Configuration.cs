@@ -31,7 +31,7 @@ namespace FProj.Data.Migrations
             if (!context.User.Any())
             {
                 string salt = Crypto.GenerateSalt();
-                string password = Crypto.HashPassword("12345") + salt;
+                string password = Crypto.HashPassword("12345" + salt);
                 UserAccount accountAdmin = new UserAccount()
                 {
                     Email = "admin@gmail.com",
